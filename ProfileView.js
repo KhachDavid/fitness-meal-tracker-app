@@ -9,10 +9,11 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 
 class ProfileView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     // Initialize states which will be used for TextInputs
     this.state = {
@@ -24,6 +25,7 @@ class ProfileView extends React.Component {
       goalDailyFat: 0.0,
       goalDailyActivity: 0.0,
     };
+
   }
 
   /**
@@ -73,6 +75,11 @@ class ProfileView extends React.Component {
       .then((res) => res.json())
       .then((res) => {
         alert("Your profile has been updated!");
+
+        // pass the updated daily goal to the parent component
+        this.props.liftState({
+          dailyGoal : this.state.goalDailyActivity
+        });
       })
       .catch((err) => {
         alert(
@@ -81,217 +88,208 @@ class ProfileView extends React.Component {
       });
   }
 
-  /**
-   * Handler for Exit button. Revokes accessToken in the state, automatically redirecting to the LoginView.
-   */
-  handleExit() {
-    this.props.revokeAccessToken();
-  }
-
   render() {
     return (
-      <ScrollView
-        style={styles.mainContainer}
+      <KeyboardAwareScrollView>
+        <ScrollView
+          style={styles.mainContainer}
         contentContainerStyle={{
           flexGrow: 11,
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
-        <View style={styles.space} />
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          }}
+        >
+          <View style={styles.space} />
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           <Icon
             name="male"
             size={40}
-            color="#900"
+            color="tomato"
             style={{ marginRight: 20 }}
           />
           <Text style={styles.bigText}>About Me</Text>
         </View>
-        <View style={styles.spaceSmall}></View>
-        <Text>Let's get to know you!</Text>
-        <Text>Specify your information below.</Text>
-        <View style={styles.space} />
+          <View style={styles.spaceSmall}></View>
+          <Text>Let's get to know you!</Text>
+          <Text>Specify your information below.</Text>
+          <View style={styles.space} />
 
-        <Text
-          style={{
-            textAlignVertical: "center",
-            fontWeight: "700",
-            fontSize: 20,
-          }}
-        >
-          Personal Information
-        </Text>
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            First Name
+          <Text
+            style={{
+              textAlignVertical: "center",
+              fontWeight: "700",
+              fontSize: 20,
+            }}
+          >
+            Personal Information
           </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="Bucky"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(firstName) => this.setState({ firstName: firstName })}
-          value={this.state.firstName}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Last Name
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="Badger"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(lastName) => this.setState({ lastName: lastName })}
-          value={this.state.lastName}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-
-        <Text
-          style={{
-            textAlignVertical: "center",
-            fontWeight: "700",
-            fontSize: 20,
-          }}
-        >
-          Fitness Goals
-        </Text>
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Daily Calories (kcal)
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="2200"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(goalDailyCalories) =>
-            this.setState({
-              goalDailyCalories: !goalDailyCalories
-                ? 0
-                : parseFloat(goalDailyCalories),
-            })
-          }
-          value={this.state.goalDailyCalories + ""}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Daily Protein (grams)
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="52"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(goalDailyProtein) =>
-            this.setState({
-              goalDailyProtein: !goalDailyProtein
-                ? 0
-                : parseFloat(goalDailyProtein),
-            })
-          }
-          value={this.state.goalDailyProtein + ""}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Daily Carbs (grams)
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="130"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(goalDailyCarbohydrates) =>
-            this.setState({
-              goalDailyCarbohydrates: !goalDailyCarbohydrates
-                ? 0
-                : parseFloat(goalDailyCarbohydrates),
-            })
-          }
-          value={this.state.goalDailyCarbohydrates + ""}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Daily Fat (grams)
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="35"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(goalDailyFat) =>
-            this.setState({
-              goalDailyFat: !goalDailyFat ? 0 : parseFloat(goalDailyFat),
-            })
-          }
-          value={this.state.goalDailyFat + ""}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-        <View>
-          <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
-            Daily Activity (mins)
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          placeholder="60"
-          placeholderTextColor="#d9bebd"
-          onChangeText={(goalDailyActivity) =>
-            this.setState({
-              goalDailyActivity: !goalDailyActivity
-                ? 0
-                : parseFloat(goalDailyActivity),
-            })
-          }
-          value={this.state.goalDailyActivity + ""}
-          autoCapitalize="none"
-        />
-        <View style={styles.spaceSmall}></View>
-
-        <View style={styles.space} />
-
-        <Text style={{ fontWeight: "700", fontSize: 20 }}>
-          Looks good! All set?
-        </Text>
-        <View style={styles.spaceSmall} />
-        <View style={styles.bottomButtons}>
-          <Button
-            color="#942a21"
-            style={styles.buttonInline}
-            title="Save Profile"
-            onPress={() => this.handleSaveProfile()}
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              First Name
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Bucky"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(firstName) => this.setState({ firstName: firstName })}
+            value={this.state.firstName}
+            autoCapitalize="none"
           />
+          <View style={styles.spaceSmall}></View>
+
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Last Name
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Badger"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(lastName) => this.setState({ lastName: lastName })}
+            value={this.state.lastName}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+
+          <Text
+            style={{
+              textAlignVertical: "center",
+              fontWeight: "700",
+              fontSize: 20,
+            }}
+          >
+            Fitness Goals
+          </Text>
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Daily Calories (kcal)
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="2200"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(goalDailyCalories) =>
+              this.setState({
+                goalDailyCalories: !goalDailyCalories
+                  ? 0
+                  : parseFloat(goalDailyCalories),
+              })
+            }
+            value={this.state.goalDailyCalories + ""}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Daily Protein (grams)
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="52"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(goalDailyProtein) =>
+              this.setState({
+                goalDailyProtein: !goalDailyProtein
+                  ? 0
+                  : parseFloat(goalDailyProtein),
+              })
+            }
+            value={this.state.goalDailyProtein + ""}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Daily Carbs (grams)
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="130"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(goalDailyCarbohydrates) =>
+              this.setState({
+                goalDailyCarbohydrates: !goalDailyCarbohydrates
+                  ? 0
+                  : parseFloat(goalDailyCarbohydrates),
+              })
+            }
+            value={this.state.goalDailyCarbohydrates + ""}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Daily Fat (grams)
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="35"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(goalDailyFat) =>
+              this.setState({
+                goalDailyFat: !goalDailyFat ? 0 : parseFloat(goalDailyFat),
+              })
+            }
+            value={this.state.goalDailyFat + ""}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+          <View>
+            <Text style={{ textAlignVertical: "center", fontWeight: "700" }}>
+              Daily Activity (mins)
+            </Text>
+          </View>
+
+          
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="60"
+            placeholderTextColor="#d9bebd"
+            onChangeText={(goalDailyActivity) =>
+              this.setState({
+                goalDailyActivity: !goalDailyActivity
+                  ? 0
+                  : parseFloat(goalDailyActivity),
+              })
+            }
+            value={this.state.goalDailyActivity + ""}
+            autoCapitalize="none"
+          />
+          <View style={styles.spaceSmall}></View>
+
+          <View style={styles.space} />
+
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>
+            Looks good! All set?
+          </Text>
           <View style={styles.spaceSmall} />
-          <Button
-            color="#942a21"
-            style={styles.buttonInline}
-            title="Exit"
-            onPress={() => this.handleExit()}
-          />
-        </View>
-        <View style={styles.space} />
-      </ScrollView>
+          <View style={styles.bottomButtons}>
+            <Button
+              color="tomato"
+              style={styles.buttonInline}
+              title="Save Profile"
+              onPress={() => this.handleSaveProfile()}
+            />
+            <View style={styles.spaceSmall} />
+          </View>
+          <View style={styles.space} />
+        </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -334,7 +332,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     height: 40,
-    borderColor: "#c9392c",
+    borderColor: "tomato",
     borderWidth: 1,
   },
   inputInline: {
@@ -344,7 +342,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     height: 40,
-    borderColor: "#c9392c",
+    borderColor: "tomato",
     borderWidth: 1,
   },
   bottomButtons: {

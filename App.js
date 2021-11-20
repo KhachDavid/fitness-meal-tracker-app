@@ -3,9 +3,15 @@ import React from "react";
 import LoginView from "./LoginView";
 import SignupView from "./SignupView";
 import ProfileView from "./ProfileView";
+import ProfileViewWrapper from "./ProfileViewWrapper";
 
+import { TouchableOpacity, StyleSheet } from "react-native";
+import { Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { Tab } from "@material-ui/core";
+import MealExtraDetail from "./MealExtraDetail"
 
 class App extends React.Component {
   constructor() {
@@ -80,21 +86,32 @@ class App extends React.Component {
               </AuthStack.Screen>
             </>
           ) : (
-            <AuthStack.Screen
-              name="FitnessTracker"
-              options={{
-                title: "Fitness Tracker",
-              }}
-            >
-              {(props) => (
-                <ProfileView
-                  {...props}
-                  username={this.state.username}
-                  accessToken={this.state.accessToken}
-                  revokeAccessToken={this.revokeAccessToken}
-                />
-              )}
-            </AuthStack.Screen>
+            <>
+              <AuthStack.Screen
+                name="FitnessTracker"
+                options={{
+                  title: "Fitness Tracker",
+                  // found this here https://openbase.com/js/react-native-vector-icons/documentation
+                  headerRight: () => (
+                    <Icon
+                      name="exit-outline"
+                      size={30}
+                      style={{ marginRight: 10 }}
+                      color="#900"
+                      onPress={() => this.revokeAccessToken()}
+                    />
+                  ),
+                }}
+              >
+                {(props) => (
+                  <ProfileViewWrapper
+                    username={this.state.username}
+                    accessToken={this.state.accessToken}
+                    revokeAccessToken={this.revokeAccessToken}
+                  />
+                )}
+              </AuthStack.Screen>
+            </>
           )}
         </AuthStack.Navigator>
       </NavigationContainer>
