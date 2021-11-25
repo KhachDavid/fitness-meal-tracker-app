@@ -57,6 +57,11 @@ class SignupView extends React.Component {
         <Text>Please create an account below.</Text>
         <View style={styles.space} />
         <TextInput
+          accessible={true}
+          accessibilityLabel="Type your desired username here"
+          accessibilityHint={"Double tap fast to edit. Currently you have typed " + this.state.username}
+          accessibilityRole="text"
+          
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholder="Username"
@@ -68,6 +73,10 @@ class SignupView extends React.Component {
         <TextInput
           style={styles.input}
           secureTextEntry={true}
+          accessible={true}
+          accessibilityLabel="Type your password here"
+          accessibilityHint={"Double tap fast to edit"}
+
           underlineColorAndroid="transparent"
           placeholder="Password"
           onChangeText={(password) => this.setState({ password: password })}

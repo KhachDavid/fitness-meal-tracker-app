@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import base64 from "base-64";
+import AccessibleTextInput from "./AccessibleTextInput";
 
 class LoginView extends React.Component {
   constructor() {
@@ -16,7 +17,7 @@ class LoginView extends React.Component {
     this.handleSignup = this.handleSignup.bind(this);
   }
 
-  /**
+  /**  
    * Sends a request to the `/login` endpoint.
    *
    * Stores accessToken if login was successful,
@@ -53,12 +54,19 @@ class LoginView extends React.Component {
   }
 
   render() {
+
+
     return (
       <View style={styles.container}>
         <Text style={styles.bigText}>FitnessTracker</Text>
         <Text>Welcome! Please login or signup to continue.</Text>
         <View style={styles.space} />
+
         <TextInput
+          accessible={true}
+          accessibilityLabel="Type your username here"
+          accessibilityHint={"Double tap fast to edit. Currently you have typed " + this.state.username}
+          accessibilityRole="text"
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholder="Username"
@@ -70,6 +78,10 @@ class LoginView extends React.Component {
         <TextInput
           style={styles.input}
           secureTextEntry={true}
+          accessible={true}
+          accessibilityLabel="Type your password here"
+          accessibilityHint={"Double tap fast to edit"}
+          accessibilityRole="text"
           underlineColorAndroid="transparent"
           placeholder="Password"
           placeholderTextColor="#992a20"
@@ -80,6 +92,9 @@ class LoginView extends React.Component {
         <View style={styles.space} />
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           <Button
+            accessible={true}
+            accessibilityLabel="Double tap this button to submit your username and password"
+            accessibilityHint="It will submit your username and password"
             color="#942a21"
             style={styles.buttonInline}
             title="Login"
@@ -87,9 +102,12 @@ class LoginView extends React.Component {
           />
           <View style={styles.spaceHorizontal} />
           <Button
+            accessible={true}
+            accessibilityLabel="Double tap this button to register"
+            accessibilityHint="It will submit your username and password"
             color="#942a21"
             style={styles.buttonInline}
-            title="Signup"
+            title="Sign up"
             onPress={this.handleSignup}
           />
         </View>
